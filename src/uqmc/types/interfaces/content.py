@@ -22,13 +22,6 @@ class IUQMCGear(form.Schema):
             description=u'The total gear count for this purchase',
         )
 
-    form.widget(on_loan=AutocompleteFieldWidget)
-    on_loan = schema.Choice(
-            title=u'Currently on loan to',
-            source=member_source_binder,
-            required=False,
-        )
-
 
 class IUQMCKit(form.Schema):
     """ Content type for all UQMC Kits that hold gear
@@ -40,9 +33,19 @@ class IUQMCKit(form.Schema):
             source=kittypes_source_binder,
         )
 
-    form.widget(on_loan=AutocompleteFieldWidget)
-    on_loan = schema.Choice(
-            title=u'Currently on loan to',
+
+class IUQMCLoan(form.Schema):
+    """ Content type for all UQMC Loans of Kits/Gear
+    """
+
+    form.widget(member=AutocompleteFieldWidget)
+    member = schema.Choice(
+            title=u'Member',
+            description=u'Type any few letters of a members name',
             source=member_source_binder,
-            required=False,
+        )
+
+    quantity = schema.Int(
+            title=u'Number of Pieces Borrowing',
+            default=1,
         )

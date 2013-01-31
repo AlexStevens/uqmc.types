@@ -1,25 +1,23 @@
 <?xml version="1.0"?>
-<object name="uqmc.types.gear" meta_type="Dexterity FTI"
+<object name="uqmc.types.loan" meta_type="Dexterity FTI"
     i18n:domain="uqmc.types" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
     <!-- Basic metadata -->
-    <property name="title" i18n:translate="">UQMC Gear</property>
-    <property name="description" i18n:translate="">UQMC Gear</property>
+    <property name="title" i18n:translate="">UQMC Loan</property>
+    <property name="description" i18n:translate="">UQMC Loan</property>
     <!--
-    <property name="content_icon">++theme++uqmc.types/gear.png</property>
+    <property name="content_icon">++theme++uqmc.types/loan.png</property>
     -->
     <property name="allow_discussion">False</property>
     <property name="global_allow">True</property>
-    <property name="filter_content_types">True</property>
-    <property name="allowed_content_types">
-        <element value="uqmc.types.loan" />
-    </property>
+    <property name="filter_content_types">False</property>
+    <property name="allowed_content_types" />
 
     <!-- schema interface -->
-    <property name="schema">uqmc.types.interfaces.content.IUQMCGear</property> 
+    <property name="schema">uqmc.types.interfaces.content.IUQMCLoan</property> 
 
     <!-- class used for content items -->
-    <property name="klass">uqmc.types.content.gear.UQMCGear</property>
+    <property name="klass">uqmc.types.content.loan.UQMCLoan</property>
 
     <!-- add permission -->
     <property name="add_permission">cmf.AddPortalContent</property>
