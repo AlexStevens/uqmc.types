@@ -38,8 +38,8 @@ class IUQMCLoan(form.Schema):
     """ Content type for all UQMC Loans of Kits/Gear
     """
 
-    form.widget(member=AutocompleteFieldWidget)
-    member = schema.Choice(
+    form.widget(member_id=AutocompleteFieldWidget)
+    member_id = schema.Choice(
             title=u'Member',
             description=u'Type any few letters of a members name',
             source=member_source_binder,

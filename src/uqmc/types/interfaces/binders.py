@@ -5,6 +5,7 @@ from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from zope.schema.vocabulary import SimpleVocabulary
 from z3c.formwidget.query.interfaces import IQuerySource
+from Products.PlonePAS.plugins.ufactory import PloneUser
 from zope.schema.interfaces import IContextSourceBinder, IVocabularyTokenized
 
 from uqmc.types.interfaces.browser import IUQMCConfiguration
@@ -103,18 +104,26 @@ class MemberSourceBinder(GroupQuerySourceBase):
     def _create_terms(self, name_filter = None):
         self.terms = []
         self.by_id = {}
+        members = None
 
-        portal_url = self.context.portal_url()
-        userprefs_url = '/'+portal_url.split('/')[-1]+'/@@usergroup-userprefs'
-        user_prefs = self.context.unrestrictedTraverse(userprefs_url)
-        members = user_prefs.membershipSearch(
-                searchString=name_filter,
-                searchGroups=False,
-            )
+        membership = getToolByName(self.context, 'portal_membership')
+        if not name_filter:
+            members = membership.listMembers()
+        else:
+            keys = {}
+            names = membership.searchForMembers({'name': name_filter})
+            emails = membership.searchForMembers({'email': name_filter})
+            for name in names:
+                keys[name.getId()] = name
+            for email in emails:
+                keys[email.getId()] = email
+            members = keys.values()
 
         for member in members:
             member_id = member.getProperty('id')
-            member_name = member.getProperty('fullname')
+            if isinstance(member, PloneUser):
+                member_id = member.getId()
+            member_name = member.getProperty('fullname') or member_id
             term = SimpleVocabulary.createTerm(
                     member_id,
                     str(member_id),

@@ -32,4 +32,10 @@
 
   <!-- -*- extra stuff goes here -*- -->
 
+  <adapter
+      for=".interfaces.content.IUQMCLoan"
+      provides=".content.loan.INameFromPersonName"
+      factory=".content.loan.NameFromPersonName"
+      />
+
 </configure>
