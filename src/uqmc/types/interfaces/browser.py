@@ -12,8 +12,8 @@ class IUQMCConfiguration(form.Schema):
             title=u'Gear Types',
             description=u'Separate types by new lines',
             value_type=schema.TextLine(),
-            default=[u'quickdraw', u'rope', u'alloy carabiner',
-                    u'steel carabiner', u'belay device', u'sling', u'bandage'
+            default=[u'Quickdraw', u'Rope', u'Alloy Carabiner',
+                    u'Steel Carabiner', u'Belay Device', u'Sling', u'Bandage'
                 ],
         )
 
@@ -21,7 +21,7 @@ class IUQMCConfiguration(form.Schema):
             title=u'Kit Types',
             description=u'Separate types by new lines',
             value_type=schema.TextLine(),
-            default=[u'top rope', u'lead', u'trad rack', u'hiking',
-                    u'first aid'
+            default=[u'Top Rope', u'Lead', u'Trad Rack', u'Hiking',
+                    u'First Aid'
                 ],
         )
