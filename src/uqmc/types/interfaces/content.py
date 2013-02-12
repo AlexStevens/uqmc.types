@@ -1,10 +1,20 @@
 from zope import schema
 from plone.directives import form
+from zope.interface import Invalid
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 
 from uqmc.types.interfaces.binders import member_source_binder, \
                                             geartypes_source_binder, \
                                             kittypes_source_binder
+
+
+def greater_than_zero(value):
+    """ Check to see if greater than zero
+    """
+    if int(value) > 0:
+        return True
+    else:
+        raise Invalid(u'Please enter a value greater than zero!')
 
 
 class IUQMCGear(form.Schema):
@@ -20,6 +30,7 @@ class IUQMCGear(form.Schema):
     total = schema.Int(
             title=u'Number of Pieces',
             description=u'The total gear count for this purchase',
+            constraint=greater_than_zero,
         )
 
 
@@ -48,4 +59,5 @@ class IUQMCLoan(form.Schema):
     quantity = schema.Int(
             title=u'Number of Pieces Borrowing',
             default=1,
+            constraint=greater_than_zero,
         )

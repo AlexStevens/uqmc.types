@@ -2,14 +2,13 @@ from five import grok
 from zope.component import getUtility
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from plone.dexterity.content import Container
-from plone.directives.dexterity import AddForm, EditForm
 
 from uqmc.types.interfaces.content import IUQMCKit
 
 
-class UQMCKit(Container):
+class UQMCContainer(Container):
     def count_left(self):
-        total_left = 1
+        total_left = self.count
 
         catalog = getUtility(IPloneSiteRoot).portal_catalog
         gear_path = '/'.join(self.getPhysicalPath())
@@ -25,9 +24,10 @@ class UQMCKit(Container):
         return total_left
 
 
-class UQMCKitAddForm(AddForm):
-    grok.name('uqmc.types.kit')
+class UQMCKit(UQMCContainer):
+    def get_kit(self):
+        return self
 
-
-class UQMCKitEditForm(EditForm):
-    grok.context(IUQMCKit)
+    @property
+    def count(self):
+        return 1

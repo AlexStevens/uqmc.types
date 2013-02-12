@@ -51,32 +51,49 @@ class UQMCLoan(Item):
         return "Loan by " + name
 
 
-class UQMCLoanAddForm(AddForm):
+class UQMCLoanForm(object):
+    def get_container_and_count(self):
+        self.container = None
+        self.count_left = 0
+
+        if hasattr(self.context, 'get_gear'):
+            self.container = self.context.get_gear()
+            self.count_left = self.container.count_left()
+            if hasattr(self.container, 'get_kit') and \
+                    self.container.get_kit().count_left() <= 0:
+                self.count_left = 0
+                self.container = self.container.get_kit()
+        elif hasattr(self.context, 'get_kit'):
+            self.container = self.context.get_kit()
+            self.count_left = self.container.count_left()
+
+
+class UQMCLoanAddForm(UQMCLoanForm, AddForm):
     grok.name('uqmc.types.loan')
 
     def updateWidgets(self):
         super(UQMCLoanAddForm, self).updateWidgets()
-        if hasattr(self.context, 'count_left'):
-            self.widgets['quantity'].value = self.context.count_left()
+        self.get_container_and_count()
+        self.widgets['quantity'].value = self.count_left
 
     @button.buttonAndHandler(u'Save', name='save')
     def handleAdd(self, action):
         data, errors = self.extractData()
 
-        if not hasattr(self.context, 'count_left'):
+        if not self.container:
             IStatusMessage(self.request).addStatusMessage(
                     'The loan must be placed within a Kit or Gear type!',
                     'error'
                 )
             return
 
-        if 'quantity' in data:
-            count_left = self.context.count_left()
-            if int(data['quantity']) > count_left:
-                raise WidgetActionExecutionError(
-                        'quantity',
-                        Invalid('There are only %s item(s) left to loan' % count_left)
-                    )
+        if 'quantity' in data and int(data['quantity']) > self.count_left:
+            raise WidgetActionExecutionError(
+                    'quantity',
+                    Invalid('There are only %s item(s) left to loan' % \
+                            self.count_left
+                        )
+                )
 
         if errors:
             self.status = self.formErrorsMessage
@@ -86,7 +103,7 @@ class UQMCLoanAddForm(AddForm):
             # mark only as finished if we get the new object
             self._finishedAdd = True
             IStatusMessage(self.request).addStatusMessage(u"Item created", "info")
-    
+
     @button.buttonAndHandler(u'Cancel', name='cancel')
     def handleCancel(self, action):
         IStatusMessage(self.request).addStatusMessage(u"Add New Item operation cancelled", "info")
@@ -94,27 +111,30 @@ class UQMCLoanAddForm(AddForm):
         notify(AddCancelledEvent(self.context))
 
 
-class UQMCLoanEditForm(EditForm):
+class UQMCLoanEditForm(UQMCLoanForm, EditForm):
     grok.context(IUQMCLoan)
+
+    def updateWidgets(self):
+        super(UQMCLoanEditForm, self).updateWidgets()
+        self.get_container_and_count()
 
     @button.buttonAndHandler(u'Save', name='save')
     def handleApply(self, action):
         data, errors = self.extractData()
 
-        if not hasattr(self.context, 'count_left'):
+        if not self.container:
             IStatusMessage(self.request).addStatusMessage(
                     'The loan must be placed within a Kit or Gear type!',
                     'error'
                 )
             return
 
-        if 'quantity' in data:
-            count_left = self.context.count_left()
-            if int(data['quantity']) > count_left:
-                raise WidgetActionExecutionError(
-                        'quantity',
-                        Invalid('There are only %s item(s) left to loan' % count_left)
-                    )
+        loanable = self.count_left + self.context.quantity
+        if 'quantity' in data and int(data['quantity']) > loanable:
+            raise WidgetActionExecutionError(
+                    'quantity',
+                    Invalid('There are only %s item(s) left to loan' % loanable)
+                )
 
         if errors:
             self.status = self.formErrorsMessage
@@ -123,7 +143,7 @@ class UQMCLoanEditForm(EditForm):
         IStatusMessage(self.request).addStatusMessage(u"Changes saved", "info")
         self.request.response.redirect(self.nextURL())
         notify(EditFinishedEvent(self.context))
-    
+
     @button.buttonAndHandler(u'Cancel', name='cancel')
     def handleCancel(self, action):
         IStatusMessage(self.request).addStatusMessage(u"Edit cancelled", "info")
