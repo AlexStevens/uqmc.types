@@ -1,5 +1,5 @@
 from zope import schema
-from plone.directives import form
+from plone.directives import form, dexterity
 from zope.interface import Invalid
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 
@@ -33,6 +33,13 @@ class IUQMCGear(form.Schema):
             constraint=greater_than_zero,
         )
 
+    form.mode(on_loan='display')
+    on_loan = schema.Int(
+            title=u'On Loan',
+            required=False,
+            default=0,
+        )
+
 
 class IUQMCKit(form.Schema):
     """ Content type for all UQMC Kits that hold gear
@@ -42,6 +49,13 @@ class IUQMCKit(form.Schema):
             title=u'Gear Type',
             description=u'Choose a type out of the following (add more via the UQMC Configuration)',
             source=kittypes_source_binder,
+        )
+
+    form.mode(on_loan='display')
+    on_loan = schema.Int(
+            title=u'On Loan',
+            required=False,
+            default=0,
         )
 
 

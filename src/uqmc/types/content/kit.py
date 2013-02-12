@@ -1,9 +1,7 @@
 from five import grok
 from zope.component import getUtility
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from plone.dexterity.content import Container
-
-from uqmc.types.interfaces.content import IUQMCKit
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 
 
 class UQMCContainer(Container):

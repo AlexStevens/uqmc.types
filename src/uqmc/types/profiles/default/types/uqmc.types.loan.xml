@@ -23,7 +23,9 @@
     <property name="add_permission">cmf.AddPortalContent</property>
 
     <!-- enabled behaviors -->
-    <property name="behaviors" />
+    <property name="behaviors">
+        <element value="plone.app.dexterity.behaviors.metadata.IPublication" />
+    </property>
 
     <!-- View information -->
     <property name="default_view">view</property>
