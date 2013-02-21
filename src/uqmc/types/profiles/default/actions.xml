@@ -14,5 +14,29 @@
    </property>
    <property name="visible">True</property>
   </object>
+  <object name="quartermaster" meta_type="CMF Action" i18n:domain="plone" insert-before="logout">
+   <property name="title" i18n:translate="">Quartermaster Area</property>
+   <property name="description" i18n:translate="">Add and remove loans to people</property>
+   <property
+      name="url_expr">string:${globals_view/navigationRootUrl}/quartermaster</property>
+   <property name="icon_expr"></property>
+   <property name="available_expr">python:member is not None</property>
+   <property name="permissions">
+    <element value="Manage portal"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+  <object name="background" meta_type="CMF Action" i18n:domain="plone" insert-before="logout">
+   <property name="title" i18n:translate="">Background Carousel</property>
+   <property name="description" i18n:translate="">Configure various properties within the website</property>
+   <property
+      name="url_expr">string:${globals_view/navigationRootUrl}/background</property>
+   <property name="icon_expr"></property>
+   <property name="available_expr">python:member is not None</property>
+   <property name="permissions">
+    <element value="Manage portal"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
  </object>
 </object>
