@@ -8,6 +8,15 @@ class IUQMCConfiguration(form.Schema):
     """ Interface for UQMC Configuration Panel
     """
 
+    executives = schema.List(
+            title=u'Current Year Executives',
+            description=u'''New line for each exec, in "LoginName | Year | Position" format, Eg.
+            alexander.stevens@uqconnect.edu.au | 2012 | El Presidente
+            nikolay.terentyev@uqconnect.edu | 2012 | Vice Prez''',
+            value_type=schema.TextLine(),
+            default=[],
+        )
+
     gear_types = schema.List(
             title=u'Gear Types',
             description=u'Separate types by new lines',
