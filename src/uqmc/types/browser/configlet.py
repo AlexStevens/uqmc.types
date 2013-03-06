@@ -73,8 +73,6 @@ class UQMCConfiguration(form.SchemaEditForm):
         settings.gear_types = data.get('gear_types', None)
         settings.kit_types = data.get('kit_types', None)
 
-
-
     def updateWidgets(self):
         super(UQMCConfiguration, self).updateWidgets()
         self.widgets['gear_types'].rows = 5
